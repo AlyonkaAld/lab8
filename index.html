@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Приветствие и вычисление площади треугольника</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 200px;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+
+        p {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Приветствие</h2>
+
+    <p id="greeting"></p>
+
+    <h2>Вычисление площади треугольника</h2>
+
+    <form id="triangleForm">
+        <label for="sideA">Сторона A:</label>
+        <input type="number" id="sideA" required>
+        <br>
+        <label for="sideB">Сторона B:</label>
+        <input type="number" id="sideB" required>
+        <br>
+        <label for="angle">Угол между сторонами (в градусах):</label>
+        <input type="number" id="angle" required>
+        <br>
+        <button type="button" onclick="calculateArea()">Вычислить площадь</button>
+    </form>
+
+    <p id="result"></p>
+
+    <script>
+        // Функция для форматирования числа с добавлением нуля, если число меньше 10
+        function formatNumber(number) {
+            return (number < 10) ? '0' + number : number;
+        }
+
+        // Получаем текущую дату и время
+        var currentDate = new Date();
+        var dayOfWeek = ["воскресенье", "понедельник", "вторник", "среда", "четверг", "пятница", "суббота"];
+        var monthNames = ["января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
+
+        // Формируем приветствие
+        var greetingText = "Сегодня - " + currentDate.getDate() + " " + monthNames[currentDate.getMonth()] +
+                           " " + currentDate.getFullYear() + " года, " + formatNumber(currentDate.getHours()) +
+                           ":" + formatNumber(currentDate.getMinutes()) + ":" + formatNumber(currentDate.getSeconds()) +
+                           ", " + dayOfWeek[currentDate.getDay()];
+
+        document.getElementById("greeting").innerHTML = greetingText;
+
+        // Функция для вычисления площади треугольника
+        function calculateArea() {
+            var sideA = parseFloat(document.getElementById("sideA").value);
+            var sideB = parseFloat(document.getElementById("sideB").value);
+            var angle = parseFloat(document.getElementById("angle").value);
+
+            // Проверка наличия введенных значений и являются ли они положительными числами
+            if (!isNaN(sideA) && !isNaN(sideB) && !isNaN(angle) && sideA > 0 && sideB > 0 && angle > 0) {
+                // Переводим угол из градусов в радианы
+                var angleInRadians = (angle * Math.PI) / 180;
+
+                // Формула для вычисления площади треугольника по двум сторонам и углу между ними
+                var area = 0.5 * sideA * sideB * Math.sin(angleInRadians);
+
+                document.getElementById("result").innerHTML = "Площадь треугольника: " + area.toFixed(2);
+            } else {
+                document.getElementById("result").innerHTML = "Введите корректные значения сторон и угла треугольника.";
+            }
+        }
+    </script>
+
+<br>
+
+
+    <h2>Поэты</h2>
+
+    <form id="poetForm">
+        <label for="nameInput">Имя поэта:</label>
+        <input type="text" id="nameInput" required>
+        <br>
+        <label for="birthYearInput">Год рождения:</label>
+        <input type="number" id="birthYearInput" required>
+        <br>
+        <label for="famousWorkInput">Знаменитое произведение:</label>
+        <input type="text" id="famousWorkInput" required>
+        <br>
+        <button type="button" onclick="createPoet()">Создать поэта</button>
+    </form>
+
+    <div id="poetsList"></div>
+
+    <script>
+        function Poet(name, birthYear, famousWork) {
+            this.name = name;
+            this.birthYear = birthYear;
+            this.famousWork = famousWork;
+
+            this.calculateAge = function() {
+                var currentYear = new Date().getFullYear();
+                return currentYear - this.birthYear;
+            };
+
+            this.displayInfo = function() {
+                return "Поэт: " + this.name + ", Год рождения: " + this.birthYear +
+                       ", Знаменитое произведение: " + this.famousWork + ", Возраст: " + this.calculateAge() + " лет";
+            };
+        }
+
+        var poets = [];
+
+        function createPoet() {
+            var name = document.getElementById("nameInput").value;
+            var birthYear = parseInt(document.getElementById("birthYearInput").value);
+            var famousWork = document.getElementById("famousWorkInput").value;
+
+            if (name && !isNaN(birthYear) && famousWork) {
+                var newPoet = new Poet(name, birthYear, famousWork);
+                poets.push(newPoet);
+
+                document.getElementById("poetForm").reset();
+
+                displayPoets();
+            } else {
+                alert("Введите корректные значения.");
+            }
+        }
+
+        function displayPoets() {
+            var poetsListDiv = document.getElementById("poetsList");
+            poetsListDiv.innerHTML = ""; 
+
+            poets.forEach(function(poet) {
+                var poetInfo = poet.displayInfo();
+                var div = document.createElement("div");
+                div.textContent = poetInfo;
+                poetsListDiv.appendChild(div);
+            });
+        }
+    </script>
+
+</body>
+</html>
